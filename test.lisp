@@ -1,0 +1,6 @@
+(eq (quote a) (quote a))
+(eq (first (rest (quote (a b c)))) (quote b))
+(eq (quote c) (first (rest (rest (quote (a b c))))))
+(eq (quote new_head) (first ((fn (x) (cons x (quote (b c d)))) (quote new_head))))
+((def double (fn (x) (cons x (cons x ())))) (quote two_of_me))
+((def fa (fn (e) (cond (atom e) e t (fa (first e))))) ((first (quote (cons (quote foo))) (quote (b c d)) (quote (e f)))))
