@@ -3,4 +3,5 @@
 (eq (quote c) (first (rest (rest (quote (a b c))))))
 (eq (quote new_head) (first ((fn (x) (cons x (quote (b c d)))) (quote new_head))))
 ((def double (fn (x) (cons x (cons x ())))) (quote two_of_me))
-((def fa (fn (e) (cond (atom e) e t (fa (first e))))) ((first (quote (cons (quote foo))) (quote (b c d)) (quote (e f)))))
+(eq ((def fa (fn (e) (cond (atom e) e t (fa (first e))))) ((first (quote (cons (quote foo)))) (quote (b c d)) (quote (e f)))) (quote b))
+(eq (((((quote quote) quote) quote) quote) x) (quote x))

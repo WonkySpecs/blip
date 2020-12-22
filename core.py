@@ -136,22 +136,21 @@ class VM:
                 return self.eval(self.cons(to_apply, args))
         else:
             caar = self.first(self.first(expr))
-            if caar.is_atom:
-                if caar.value.string == "fn":
-                    defs = self.rest(self.first(expr))
-                    args = self.first(defs).value
-                    to_eval = self.first(self.rest(defs))
-                    params = self.rest(expr).value
+            if caar.is_atom and caar.value.string == "fn":
+                defs = self.rest(self.first(expr))
+                args = self.first(defs).value
+                to_eval = self.first(self.rest(defs))
+                params = self.rest(expr).value
 
-                    assert len(args) == len(params), f"Lambda function '{self.first(self.first(expr))}' requires {len(args)} args, {len(params)} were given"
+                assert len(args) == len(params), f"Lambda function '{self.first(self.first(expr))}' requires {len(args)} args, {len(params)} were given"
 
-                    for a, p in zip(args, params):
-                        self._env.append((a, self.eval(p)))
-                    res = self.eval(to_eval)
-                    for _ in params:
-                        self._env.pop()
-                    return res
-                elif caar.value.string == "def":
+                for a, p in zip(args, params):
+                    self._env.append((a, self.eval(p)))
+                res = self.eval(to_eval)
+                for _ in params:
+                    self._env.pop()
+                return res
+            elif caar.is_atom and caar.value.string == "def":
                     defs = self.rest(self.first(expr))
                     label = self.first(defs)
                     to_append = self.first(self.rest(defs))
@@ -160,6 +159,9 @@ class VM:
                     res = self.eval(new_expr)
                     self._env.pop()
                     return res
+            else:
+                evalled_op = self.eval(self.first(expr))
+                return self.eval(self.cons(evalled_op, self.rest(expr)))
 
 
     def print(self, o):
